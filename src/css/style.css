@@ -183,7 +183,8 @@ ul {
 }
 
 .nav-links a:hover::after,
-.nav-links a.active::after {
+.nav-links a.active::after,
+.nav-links a.current::after {
   width: 100%;
 }
 
@@ -214,6 +215,12 @@ ul {
 
 .nav-links a.nav-cta::after {
   display: none;
+}
+
+.nav-links a.nav-cta.current::after {
+  display: block;
+  bottom: -10px;
+  left: 0;
 }
 
 .nav-toggle {
@@ -376,6 +383,15 @@ ul {
 @media (max-width: 900px) {
   .hero {
     flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding-top: 160px;
+  }
+
+  .hero .container {
+    flex: 1;
+    display: flex;
+    align-items: center;
   }
 
   .hero--with-panel .container {
@@ -383,11 +399,18 @@ ul {
   }
 
   .hero-reviews {
-    position: static;
+    position: relative;
+    top: auto;
+    right: auto;
     transform: none;
-    width: 100%;
-    margin-top: 32px;
-    padding: 24px;
+    width: auto;
+    margin: 32px 24px 28px;
+    padding: 20px 24px;
+    align-items: flex-start;
+  }
+
+  .hero-reviews-google {
+    align-self: flex-start;
     align-items: flex-start;
   }
 }
@@ -433,14 +456,20 @@ ul {
 /* ---------- About ---------- */
 .about {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   gap: 60px;
   align-items: center;
 }
 
-.about img {
-  border-radius: var(--radius);
+.about-img {
+  overflow: hidden;
   box-shadow: var(--shadow);
+}
+
+.about-img img {
+  display: block;
+  width: 100%;
+  transform: scale(1.25);
 }
 
 .about .eyebrow {
@@ -480,9 +509,7 @@ ul {
 
 /* ---------- Team ---------- */
 .team {
-  margin-top: 70px;
-  padding-top: 50px;
-  border-top: 1px solid #e2e2e2;
+  margin-top: 40px;
 }
 
 .team-title {
@@ -698,7 +725,8 @@ ul {
 
 .contact-info {
   background: var(--white);
-  padding: 40px;
+  padding: 40px 40px 40px 0;
+  margin-left: -24px;
 }
 
 .contact-info h3 {
@@ -857,6 +885,10 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .contact-info {
+    margin-left: 0;
+  }
+
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -872,23 +904,28 @@ footer {
   }
 
   .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    height: 100vh;
-    width: min(320px, 80%);
+    position: absolute;
+    top: 100%;
+    right: 16px;
+    margin-top: 8px;
+    width: min(240px, calc(100% - 32px));
     background: var(--white);
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
-    padding: 40px;
-    gap: 26px;
-    transition: right var(--transition);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+    padding: 24px 28px;
+    gap: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
   }
 
   .nav-links.open {
-    right: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 
   .nav-links a {
@@ -902,5 +939,96 @@ footer {
 
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+.stat-reviews {
+  display: block;
+}
+
+.stats .stat-reviews strong {
+  font-size: 1.5rem;
+}
+
+.stats .stat-reviews strong .stat-stars {
+  display: inline;
+  font-size: 1.5rem;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+
+.stat-google {
+  display: block;
+  height: 24px;
+  width: auto;
+  margin-top: 6px;
+  color: var(--grey);
+}
+
+/* ---------- Mobile-Feinschliff ---------- */
+@media (max-width: 720px) {
+  .section {
+    padding: 60px 0;
+  }
+
+  .nav-links a.nav-cta {
+    color: var(--dark) !important;
+    border-color: var(--dark);
+  }
+
+  .nav-links a.nav-cta:hover {
+    color: var(--white) !important;
+    border-color: var(--red);
+  }
+
+  .stats {
+    flex-wrap: wrap;
+    gap: 24px 32px;
+  }
+
+  .about {
+    gap: 32px;
+  }
+
+  .team {
+    margin-top: 32px;
+  }
+
+  .team-card {
+    padding: 32px 20px;
+  }
+
+  .team-contact {
+    flex-wrap: wrap;
+  }
+
+  .team-contact span {
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+
+  .card-img {
+    height: 230px;
+  }
+
+  .cards-grid {
+    gap: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .about h2 {
+    font-size: 1.7rem;
+  }
+}
+
+/* ---------- Handy: dunklerer Hero-Hintergrund ---------- */
+@media (max-width: 720px) {
+  .hero::before {
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.6) 0%, rgba(10, 10, 10, 0.55) 50%, rgba(10, 10, 10, 0.65) 100%);
   }
 }
