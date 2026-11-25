@@ -123,9 +123,43 @@ document.addEventListener("DOMContentLoaded", () => {
       contactForm.querySelectorAll("input, select, textarea").forEach((field) => {
         if (!validateField(field)) isValid = false;
       });
-      if (!isValid) {
-        e.preventDefault();
+      e.preventDefault();
+      if (!isValid) return;
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Wird gesendet…";
+
+      let status = contactForm.querySelector(".form-status");
+      if (!status) {
+        status = document.createElement("p");
+        status.className = "form-status";
+        status.setAttribute("role", "status");
+        contactForm.appendChild(status);
       }
+      status.textContent = "";
+      status.classList.remove("success", "error");
+
+      fetch(contactForm.action, {
+        method: "POST",
+        body: new FormData(contactForm),
+        headers: { Accept: "application/json" },
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error("Formspree error");
+          contactForm.reset();
+          status.classList.add("success");
+          status.textContent = "Vielen Dank! Ihre Nachricht wurde gesendet. Wir melden uns bald bei Ihnen.";
+        })
+        .catch(() => {
+          status.classList.add("error");
+          status.textContent = "Leider ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie an info@bess-immo.ch.";
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+        });
     });
   }
 
@@ -137,5 +171,13 @@ document.addEventListener("DOMContentLoaded", () => {
     navLinks.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => navLinks.classList.remove("open"));
     });
+
+    const closeOnOutside = (e) => {
+      if (!navLinks.classList.contains("open")) return;
+      if (navLinks.contains(e.target) || navToggle.contains(e.target)) return;
+      navLinks.classList.remove("open");
+    };
+    document.addEventListener("click", closeOnOutside);
+    document.addEventListener("touchstart", closeOnOutside, { passive: true });
   }
 });
