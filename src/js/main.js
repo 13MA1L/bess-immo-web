@@ -180,4 +180,42 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", closeOnOutside);
     document.addEventListener("touchstart", closeOnOutside, { passive: true });
   }
+
+  // Sanftes Einblenden beim Scrollen
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const gridSelector = ".cards-grid, .team-grid, .footer-grid";
+    const targets = new Set();
+    const delays = new Map();
+
+    document.querySelectorAll(".section .container, .cta-banner .container").forEach((container) => {
+      Array.from(container.children).forEach((child) => {
+        if (child.matches(gridSelector)) return;
+        targets.add(child);
+      });
+    });
+    document.querySelectorAll(gridSelector).forEach((grid) => {
+      Array.from(grid.children).forEach((child, i) => {
+        targets.add(child);
+        delays.set(child, i * 120);
+      });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    targets.forEach((el) => {
+      el.classList.add("reveal");
+      if (delays.has(el)) el.style.transitionDelay = delays.get(el) + "ms";
+      observer.observe(el);
+    });
+  }
 });

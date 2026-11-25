@@ -258,7 +258,7 @@ ul {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10, 10, 10, 0.38) 0%, rgba(10, 10, 10, 0.24) 50%, rgba(10, 10, 10, 0.4) 100%);
+  background: rgba(10, 10, 10, 0.45);
 }
 
 .hero .container {
@@ -1073,4 +1073,15 @@ footer {
 
 .footer-bottom a:hover {
   text-decoration: underline;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
