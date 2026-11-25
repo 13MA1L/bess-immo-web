@@ -250,7 +250,7 @@ ul {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: url("../../img/background2.jpg") center/cover no-repeat;
+  background: url("../img/background2.jpg") center/cover no-repeat;
   color: var(--white);
 }
 
@@ -655,7 +655,7 @@ ul {
 }
 
 .ref-card .ref-media.photo {
-  background: url("../../img/background.jpg") center/cover no-repeat;
+  background: url("../img/background.jpg") center/cover no-repeat;
 }
 
 .ref-card .ref-media span.tag {
